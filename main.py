@@ -1,20 +1,49 @@
+def encrypt(phrase, keyword):
+    key = ""
+    lent = len(phrase)
 
-def encrypt(string, shift):
-    cipher = ''
-    for char in string:
-        if char == ' ':
-            cipher = cipher + char
-        elif char.isupper():
-            cipher = cipher + chr((ord(char) + shift - 65) % 26 + 65)
-        else:
-            cipher = cipher + chr((ord(char) + shift - 97) % 26 + 97)
+    key += keyword
 
-    return cipher
+    x = 0
 
-def en_cipher(string, key):
-    return string
+    res = ""
 
-text = input("enter string: ")
-s = int(input("enter shift number: "))
-print("original string: ", text)
-print("after encryption: ", encrypt(text, s))
+    for i in range (lent - len(key)):
+        key += phrase[x]
+        x+=1
+
+    # print(key)
+    for i in range (lent):
+        temp = (ord(phrase[i])-65) + (ord(key[i])-65)
+        if (temp > 26):
+            temp = temp%26
+        res += chr(temp+65)
+
+    return res
+
+def decrypt(msg, keyword):
+    phr = "" + keyword
+    lent = len(msg)
+    for i in range (lent):
+        temp = (ord(msg[i])-65) - (ord(phr[i])-65)
+        if (temp < 0):
+            temp += 26
+        phr += chr(temp+65)
+
+    return phr
+
+choice = input("Enter your choice 'en'(encryption) or 'de'(decryption): ")
+phrase = input("Enter your phrase here: ")
+phrase = phrase.upper()
+keyword = input("Enter your keyword: ")
+keyword = keyword.upper()
+
+if (choice == "en"):
+    res = encrypt(phrase, keyword)
+    print("Your encrypted message is: ", res)
+elif (choice == "de"):
+    res = ""
+    de_res = decrypt(phrase, keyword)
+    for i in range(len(keyword), len(de_res)):
+        res += de_res[i]
+    print("Your decrypted message is: ",res)
